@@ -65,12 +65,14 @@ jobs:
         echo "Pushing Docker image to ECR..."
         docker push ${{ secrets.ECR_REPOSITORY }}:latest
     
-    - name: Login to Serverless
+    - name: Set up Serverless Access Key
       env:
-          SERVERLESS_ACCESS_TOKEN: ${{ secrets.SERVERLESS_ACCESS_TOKEN }}
-      run: serverless login --token $SERVERLESS_ACCESS_TOKEN
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      run: echo "Serverless Access Key set."    
     
     - name: deploy
+      env:
+        SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
       run: 
         sls deploy --stage dev --verbose
 
