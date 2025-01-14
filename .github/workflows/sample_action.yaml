@@ -45,7 +45,7 @@ jobs:
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
-      with:
+      with:        
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
@@ -64,18 +64,27 @@ jobs:
       run: |
         echo "Pushing Docker image to ECR..."
         docker push ${{ secrets.ECR_REPOSITORY }}:latest
-
-    - name: Deploy to AWS Lambda
-      uses: serverless/github-action@v2
-      with:
-        args: deploy
+    
+    - name: Login to Serverless
       env:
-        SERVERLESS_ACCESS_TOKEN: ${{ secrets.SERVERLESS_ACCESS_TOKEN }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
+          SERVERLESS_ACCESS_TOKEN: ${{ secrets.SERVERLESS_ACCESS_TOKEN }}
+      run: serverless config credentials --provider aws --key $SERVERLESS_ACCESS_TOKEN --overwrite
+    
+    - name: deploy
+      run: 
+        sls deploy --stage dev --verbose
 
     - name: Post-deployment notification
       if: success()
       run: echo "Deployment successful!"
 
+
+    # - name: Configure serverless 
+    #   uses: serverless/github-action@v2
+    #   with:
+    #     args: deploy
+    #   env:
+    #     SERVERLESS_ACCESS_TOKEN: ${{ secrets.SERVERLESS_ACCESS_TOKEN }}
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     AWS_REGION: ${{ secrets.AWS_REGION }}
