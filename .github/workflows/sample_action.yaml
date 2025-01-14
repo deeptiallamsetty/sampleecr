@@ -54,7 +54,7 @@ jobs:
         docker build -t sampleecr .
         docker tag sampleecr:latest ${{ secrets.ECR_REPOSITORY }}:latest
 
-    - name: Push to AWS ECR
+    - name: Push to AWS ECR with echo
       run: |
         echo "Pushing Docker image to ECR..."
         docker push ${{ secrets.ECR_REPOSITORY }}:latest
