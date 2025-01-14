@@ -1,0 +1,20 @@
+service: sampleecr
+
+provider:
+  name: aws
+  runtime: provided
+  stage: dev
+  region: us-east-1
+  ecr:
+    images:
+      sampleecr:
+        path: .
+        
+functions:
+  api:
+    image:
+      name: sampleecr
+    events:
+      - http:
+          path: /
+          method: get

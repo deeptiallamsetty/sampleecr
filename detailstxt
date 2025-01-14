@@ -1,0 +1,23 @@
+aws ecr create-repository --repository-name sampleecr
+{
+    "repository": {
+        "repositoryArn": "arn:aws:ecr:us-east-1:982534355171:repository/sampleecr",
+        "registryId": "982534355171",
+        "repositoryName": "sampleecr",
+        "repositoryUri": "982534355171.dkr.ecr.us-east-1.amazonaws.com/sampleecr",
+        "createdAt": "2024-12-29T00:00:26.244000+04:00",
+        "imageTagMutability": "MUTABLE",
+        "imageScanningConfiguration": {
+            "scanOnPush": false
+        },
+        "encryptionConfiguration": {
+            "encryptionType": "AES256"
+        }
+    }
+}
+
+docker tag sampleecr:latest 982534355171.dkr.ecr.us-east-1.amazonaws.com/sampleecr:latest
+
+docker push 982534355171.dkr.ecr.us-east-1.amazonaws.com/sampleecr:latest
+
+sls deploy

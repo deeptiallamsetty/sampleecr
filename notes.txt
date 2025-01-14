@@ -1,0 +1,28 @@
+aws ecr create-repository --repository-name flask-todo-app
+
+{
+    "repository": {
+        "repositoryArn": "arn:aws:ecr:us-east-1:982534355171:repository/sampleecr",
+        "registryId": "982534355171",
+        "repositoryName": "sampleecr",
+        "repositoryUri": "982534355171.dkr.ecr.us-east-1.amazonaws.com/sampleecr",
+        "createdAt": "2025-01-14T22:35:33.426000+04:00",
+        "imageTagMutability": "MUTABLE",
+        "imageScanningConfiguration": {
+            "scanOnPush": false
+        },
+        "encryptionConfiguration": {
+            "encryptionType": "AES256"
+        }
+    }
+}
+
+
+
+docker build -t flask-api-app .
+
+docker tag flask-api-app:latest <account-id>.dkr.ecr.<region>.amazonaws.com/flask-api-app:latest
+
+docker push <account-id>.dkr.ecr.<region>.amazonaws.com/flask-api-app:latest
+
+sls deploy
